@@ -1,54 +1,84 @@
-int comparacoes = 0; // Contador global
-int trocas = 0;      // Contador global
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-void bubbleSort(int v[], int n) {
-  // TODO: Implementar aqui
-  // Incrementar comparacoes++ a cada comparação
-  // Incrementar trocas++ a cada troca
-
-  int i, j, aux;
-
-  // BUBBLE SORT COM EARLY STOP
-
-  for (i = 0; i < n - 1; i++) {
-    int houveTroca = 0;
-    for (j = 0; j < n - i - 1; j++) {
-      comparacoes++;
-      
-      if (v[j] > v[j + 1]) {
-        aux = v[j];
-        v[j] = v[j + 1];
-        v[j + 1] = aux;
-        trocas++;
-        houveTroca = 1;
+void bubble_sem_otimizacao(int dados[], int n, long *comparacoes, long *trocas){
+  *comparacoes = 0, *trocas = 0;
+  for(int i = 0; i < n -1; i++){
+    for(int j = 0; j < n - i - 1; j++){
+      (*comparacoes)++;
+      if(dados[j] > dados[j+1]){
+        int aux = dados[j];
+        dados[j] = dados[j + 1];
+        dados[j + 1] = aux;
+        (*trocas)++;
       }
     }
-
-    if (houveTroca == 0){
-      break;
-    }
-    
   }
 }
 
-void imprimirVetor(int v[], int n) {
-  for (int i = 0; i < n; i++)
-    printf("%d ", v[i]);
-  printf("\n");
+void bubble_otimizado(int dados[], int n, long *comparacoes, long *trocas){
+  *comparacoes = 0, *trocas = 0;
+  for(int i = 0; i < n-1; i++){
+    int trocou = 0;
+    for(int j = 0; j < n-i-1; j++){
+      (*comparacoes)++;
+      if(dados[j] > dados[j+1]){
+        int aux = dados[j];
+        dados[j] = dados[j+1];
+        dados[j+1] = aux;
+        (*trocas)++;
+        trocou = 1;
+      }
+    }
+    if (trocou == 0){
+      break;
+    }
+  }
 }
 
-int main() {
-  int dados[] = {64, 25, 34, 12, 22, 11, 90};
-  int n = 7;
+void testar(char* nome, int dados[], int n){
+  printf("\n------- %s -------\n", nome);
 
-  printf("Vetor original: ");
-  imprimirVetor(dados, n);
+  // SEM otimização
+  int copia1[20]; 
+  for(int k = 0; k<n; k++) copia1[k] = dados[k];
+  long comps1, trocas1;
+  bubble_sem_otimizacao(copia1, n, &comps1, &trocas1);  
+  printf("Sem otimização: %ld comparações, %ld trocas\n", comps1, trocas1);
 
-  bubbleSort(dados, n);
+  // COM otimização
+  int copia2[20]; 
+  for(int k = 0; k<n; k++) copia2[k] = dados[k];
+  long comps2, trocas2;
+  bubble_otimizado(copia2, n, &comps2, &trocas2);  
+  printf("Com otimização: %ld comparações, %ld trocas\n", comps2, trocas2);
+}
 
-  printf("Vetor ordenado: ");
-  imprimirVetor(dados, n);
-  printf("Comparações: %d | Trocas: %d\n", comparacoes, trocas);
+int main(){
+  int n = 20;
+
+  // 1. Vetor ORDENADO
+  int ordenado[20];
+  for(int i = 0; i < n; i++){
+    ordenado[i] = i;
+  }
+  testar("Vetor ordenado", ordenado, n);
+
+  // 2. Vetor REVERSO
+  int reverso[20];
+  for(int i = 0; i < n; i++){
+    reverso[i] = n - 1 - i;  
+  }
+  testar("Vetor reverso", reverso, n);
+
+  // 3. Vetor ALEATÓRIO
+  int aleatorio[20];  
+  srand(time(NULL));
+  for(int i = 0; i < n; i++){
+    aleatorio[i] = rand() % 100;
+  }
+  testar("Vetor aleatorio", aleatorio, n);
 
   return 0;
 }
