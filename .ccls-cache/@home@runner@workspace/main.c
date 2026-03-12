@@ -1,55 +1,66 @@
-int comparacoes = 0;  // Contador global
-int trocas = 0;       // Contador global
+#include <stdio.h>
 
-void bubbleSort(int v[], int n) {
-    // TODO: Implementar aqui
-    // Incrementar comparacoes++ a cada comparação
-    // Incrementar trocas++ a cada troca
-
-  int i, j, aux;
-
-//BUBBLE SORT SIMPLES
-    
-    /*for(i = 0; i < n-1; i ++){
-
-        for(j = 0; j < n-i-1; j++){
-
-            if(v[j] > v[j+1]){
-                aux = v[j];
-                v[j] = v[j+1];
-                v[j] = aux;
-            }
-        
+int particiona (int *V, int inicio, int final) {
+    int esq, dir, pivo, aux;
+    esq = inicio+1;
+    dir = final;
+    pivo = V[inicio];
+    while (esq <= dir) {
+        while (esq <= final && V[esq] <= pivo )
+            esq++;
+        while (dir >= inicio && V[dir] >= pivo)
+            dir--;
+        if (esq < dir) {
+            aux = V[esq];
+            V[esq] = V[dir];
+            V[dir] = aux;
         }
-    
-    }*/
+    }
+    /*V[inicio] = V[dir];
+    V[dir] = pivo;*/
 
 
-  
-  
-
-
-  
+  aux = V[inicio];
+  V[inicio] = V[dir];
+  V[dir] = aux;
+    return dir;
 }
 
-void imprimirVetor(int v[], int n) {
-    for(int i = 0; i < n; i++)
-        printf("%d ", v[i]);
-    printf("\n");
+void quickSort(int *V, int inicio, int fim) {
+    int pivo;
+    if (fim > inicio) {
+        pivo = particiona (V, inicio,fim);
+        quickSort(V, inicio, pivo-1);
+        quickSort(V, pivo+1, fim);
+    }
 }
+
 
 int main() {
-    int dados[] = {64, 34, 25, 12, 22, 11, 90};
-    int n = 7;
 
-    printf("Vetor original: ");
-    imprimirVetor(dados, n);
+  int n;
+  printf("Digite o tamanho do vetor: ");
+  scanf("%d", &n);
+  int vetor[n];
 
-    bubbleSort(dados, n);
-
-    printf("Vetor ordenado: ");
-    imprimirVetor(dados, n);
-    printf("Comparações: %d | Trocas: %d\n", comparacoes, trocas);
-
-    return 0;
+  printf("Digite os %d elementos:\n", n);
+  for(int i = 0; i < n; i++) {
+      printf("Elemento %d: ", i + 1);
+      scanf("%d", &vetor[i]);
+  }
+  printf("Vetor ANTES: ");
+  for(int i = 0; i < n; i++) {
+    printf("%d ", vetor[i]);
+  }
+  printf("\n");
+  
+  quickSort(vetor, 0, n-1);
+  
+  printf("Vetor DEPOIS: ");
+  for(int i = 0; i < n; i++) {
+    printf("%d ", vetor[i]);
+  }
+  printf("\n");
+  /*89 77 2 20 38 */
+  return 0;
 }
