@@ -37,19 +37,15 @@ int main() {
 
   int n;
   printf("Digite o tamanho do vetor: ");
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
+
   scanf("%d", &n);
-#pragma GCC diagnostic pop
+
   int vetor[n];
 
   printf("Digite os %d elementos:\n", n);
   for(int i = 0; i < n; i++) {
       printf("Elemento %d: ", i + 1);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
       scanf("%d", &vetor[i]);
-#pragma GCC diagnostic pop
   }
   printf("Vetor ANTES: ");
   for(int i = 0; i < n; i++) {
